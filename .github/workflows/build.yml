@@ -9,9 +9,9 @@ jobs:
   devcontainers:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
+    - name: Checkout code
       uses: actions/checkout@v2
-    - name: 
+    - name: Build devcontainer image
       run: |
         set -x
         npm install -g @devcontainers/cli
@@ -30,10 +30,10 @@ jobs:
           docker push $IMAGE_ID:latest || true
           rm -rf ~/.docker
         fi
-    - name: dune
-      run: |
+    - name: Build
+      run: devcontainer exec --workspace-folder . dune build
+    - name: Test
         set -x
-        devcontainer exec --workspace-folder . dune build
         devcontainer exec --workspace-folder . dune test
         devcontainer exec --workspace-folder . dune exec example
   CI:
