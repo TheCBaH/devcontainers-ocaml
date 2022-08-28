@@ -2,13 +2,16 @@
 set -eu
 set -x
 username=${USERNAME}
-uid=$(id -u ${username})
-gid=$(id -g ${username})
-chroot --skip-chdir --userspec=$uid:$gid / sh -eux <<'_EOS_'
+su -l $username -c "env OCAML_VERSION=${OCAML_VERSION:-4.14.0} sh" <<'_EOS_'
+set -eu
+set -x
 env
 opam init --disable-sandboxing -a
-opam switch create 4.12.1
+opam switch create ${OCAML_VERSION}
 eval $(opam config env)
 which ocaml;ocaml -version
-opam install -y dune
+opam install -y \
+ dune\
+ ocaml-lsp-server\
+ ocamlformat\
 _EOS_

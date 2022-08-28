@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 set -x
-DEBIAN_FRONTEND=noninteractive 
+DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
 apt-get update
 apt-get install --no-install-recommends -y \
