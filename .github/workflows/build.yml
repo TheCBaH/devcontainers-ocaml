@@ -22,7 +22,7 @@ jobs:
         set -x
         npm install -g @devcontainers/cli
         IMAGE_ID=ghcr.io/$GITHUB_REPOSITORY/$image
-        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]'):latest
         devcontainer build --image-name $IMAGE_ID --cache-from $IMAGE_ID --workspace-folder .
         devcontainer up --workspace-folder .
         devcontainer exec --workspace-folder . ocaml --version
