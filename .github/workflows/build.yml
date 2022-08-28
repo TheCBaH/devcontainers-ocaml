@@ -11,21 +11,25 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v2
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v1 
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     - name: 
       run: |
         set -x
         npm install -g @devcontainers/cli
         IMAGE_ID=ghcr.io/$GITHUB_REPOSITORY/devcontainers-ocaml.ci
         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        old_id=''
+        if docker pull $IMAGE_ID; then
+          old_id=$(docker image inspect $IMAGE_ID --format "{{.ID}}")
+        fi
         devcontainer build --image-name $IMAGE_ID --cache-from $IMAGE_ID --workspace-folder .
         devcontainer up --workspace-folder .
         devcontainer exec --workspace-folder . ocaml --version
+        if [ "$old_id" != "$new_id" ]; then
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker tag $image $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest || true
+          rm -rf ~/.docker
+        fi
     - name: dune
       run: |
         set -x
