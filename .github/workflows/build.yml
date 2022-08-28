@@ -32,3 +32,34 @@ jobs:
         devcontainer exec --workspace-folder . dune build
         devcontainer exec --workspace-folder . dune test
         devcontainer exec --workspace-folder . dune exec example
+  CI:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        ocaml-compiler:
+          - 4.14.x
+          - 4.13.x
+          - 4.08.x
+          - 4.06.x
+          - 4.06.x
+        runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+
+      - run: opam install . --deps-only --with-doc --with-test
+
+      - run: opam exec -- dune build
+
+      - run: opam exec -- dune runtest
+
+      - run: opam exec -- dune exec example
