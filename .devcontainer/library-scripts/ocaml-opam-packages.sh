@@ -7,5 +7,7 @@ set -eu
 set -x
 ocaml --version
 opam install -y\
- ${OCAML_PACKAGES:-utop}
+ ${OCAML_PACKAGES:-utop} \
+
+opam clean
 _EOS_
