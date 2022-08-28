@@ -46,7 +46,7 @@ jobs:
           - 4.08.x
           - 4.06.x
           - 4.06.x
-        runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
