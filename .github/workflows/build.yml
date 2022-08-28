@@ -33,6 +33,7 @@ jobs:
     - name: Build
       run: devcontainer exec --workspace-folder . dune build
     - name: Test
+      run: |
         set -x
         devcontainer exec --workspace-folder . dune test
         devcontainer exec --workspace-folder . dune exec example
