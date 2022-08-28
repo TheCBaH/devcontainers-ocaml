@@ -13,4 +13,6 @@ opam install -y \
  dune\
  ocaml-lsp-server\
  ocamlformat\
+
+opam clean
 _EOS_
