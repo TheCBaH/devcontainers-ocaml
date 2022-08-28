@@ -21,8 +21,8 @@ jobs:
       run: |
         set -x
         npm install -g @devcontainers/cli
-        IMAGE_ID=ghcr.io/$GITHUB_REPOSITORY/$image
-        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]'):latest
+        IMAGE_ID=ghcr.io/$GITHUB_REPOSITORY/devcontainers-ocaml.ci
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
         devcontainer build --image-name $IMAGE_ID --cache-from $IMAGE_ID --workspace-folder .
         devcontainer up --workspace-folder .
         devcontainer exec --workspace-folder . ocaml --version
