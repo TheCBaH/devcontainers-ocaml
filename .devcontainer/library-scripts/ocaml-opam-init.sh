@@ -5,7 +5,6 @@ username=${USERNAME}
 su -l $username -c "env OCAML_VERSION=${OCAML_VERSION:-4.14.0} sh" <<'_EOS_'
 set -eu
 set -x
-env
 opam init --disable-sandboxing -a
 opam switch create ${OCAML_VERSION}
 eval $(opam config env)
