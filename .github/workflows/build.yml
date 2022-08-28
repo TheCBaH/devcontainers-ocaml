@@ -12,16 +12,23 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
     - name: Login to GitHub Container Registry
-      uses: docker/login-action@v1
+      uses: docker/login-action@v1 
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Build and run dev container task
-      uses: devcontainers/ci@v0.2
-      with:
-        imageName: ghcr.io/$GITHUB_REPOSITORY/devcontainer-ocaml.ci
-        runCmd: |
-          dune build
-          dune test
-          dune exec example
+    - name: 
+      run: |
+        set -x
+        npm install -g @devcontainers/cli
+        IMAGE_ID=ghcr.io/$GITHUB_REPOSITORY/$image
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        devcontainer build --image-name $IMAGE_ID --cache-from $IMAGE_ID --workspace-folder .
+        devcontainer up --workspace-folder .
+        devcontainer exec --workspace-folder . ocaml --version
+    - name: dune
+      run: |
+        set -x
+        devcontainer exec --workspace-folder . dune build
+        devcontainer exec --workspace-folder . dune test
+        devcontainer exec --workspace-folder . dune exec example
