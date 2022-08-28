@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  devcontainers:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: 
+      run: |
+        set -x
+        npm install -g @devcontainers/cli
+        devcontainer up --workspace-folder .
+        devcontainer exec --workspace-folder ocaml --version
+    - name: dune
+      run: |
+        set -x
+        devcontainer exec --workspace-folder dune build
+        devcontainer exec --workspace-folder dune test
+        devcontainer exec --workspace-folder dune exec example
