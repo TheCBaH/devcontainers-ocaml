@@ -32,7 +32,6 @@ jobs:
         devcontainer exec --workspace-folder . ocaml --version
         new_id=$(docker image inspect $IMAGE_ID --format "{{.ID}}")
         if [ "$old_id" != "$new_id" ]; then
-          docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker tag $image $IMAGE_ID:latest
           docker push $IMAGE_ID:latest || true
         fi
